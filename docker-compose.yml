@@ -1,0 +1,21 @@
+version: "3.8"
+services:
+  app:
+    build: .
+    command: yarn start:dev
+    container_name: ts-node-project-app
+    user: root
+    working_dir: /app
+    volumes:
+      - .:/app
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: development
+    tty: true
+    networks:
+      - project-network
+
+networks:
+  project-network:
+    driver: bridge

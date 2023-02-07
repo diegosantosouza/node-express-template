@@ -1,0 +1,7 @@
+*
+!src/
+!types/
+!tsconfig.json
+!package*.json
+
+node_modules
