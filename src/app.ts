@@ -2,10 +2,10 @@ import * as express from 'express'
 import * as morgan from 'morgan'
 import helmet from 'helmet'
 import * as cors from 'cors'
-import routes from './routes'
+import routes from './main/routes/config/routes'
 
-import apiVersion from './common/middlewares/api-version'
-import errorHandler from './common/middlewares/error-handler'
+import apiVersion from './main/middlewares/api-version'
+import errorHandler from './main/middlewares/error-handler'
 
 const morganFormat =
   ':remote-addr - :method :url :status :response-time ms - :res[content-length]'
