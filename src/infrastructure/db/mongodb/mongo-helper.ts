@@ -3,13 +3,13 @@ import mongoose, { Collection, Connection } from 'mongoose'
 class MongoHelper {
   connection: Connection | null
 
-  constructor(private readonly url: string) {
-    this.url = url
+  constructor(private readonly uri: string) {
+    this.uri = uri
     this.connection = null
   }
 
   async connect() {
-    await mongoose.connect(this.url,)
+    await mongoose.connect(this.uri,)
     this.connection = mongoose.connection
   }
 
