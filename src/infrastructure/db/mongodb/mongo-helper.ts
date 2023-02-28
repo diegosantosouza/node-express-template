@@ -1,15 +1,14 @@
 import mongoose, { Collection, Connection } from 'mongoose'
 
 class MongoHelper {
-  connection: Connection | null
+  private connection: Connection | null
 
-  constructor(private readonly uri: string) {
-    this.uri = uri
+  constructor() {
     this.connection = null
   }
 
-  async connect() {
-    await mongoose.connect(this.uri,)
+  async connect(uri: string) {
+    await mongoose.connect(uri)
     this.connection = mongoose.connection
   }
 
@@ -20,7 +19,6 @@ class MongoHelper {
 
   getCollection(name: string): Collection | null {
     if (!this.connection) {
-      console.error('Database not connected')
       return null
     }
     return this.connection.collection(name)

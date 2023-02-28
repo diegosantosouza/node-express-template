@@ -1,8 +1,8 @@
 FROM node:18-alpine as builder
 WORKDIR /app
 COPY . .
-RUN npm install
-RUN npm run build
+RUN yarn install
+RUN yarn run build
 
 FROM node:18-alpine
 ENV NODE_ENV=production
@@ -11,4 +11,3 @@ COPY --from=builder app/dist /app/dist
 COPY --from=builder app/package*.json /app/
 RUN yarn install --frozen-lockfile
 EXPOSE 3000
-CMD [ "yarn", "start" ]
