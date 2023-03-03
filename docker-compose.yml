@@ -9,6 +9,7 @@ services:
       - .:/app
     ports:
       - '3000:3000'
+      - '9229:9229'
     environment:
       NODE_ENV: development
       MONGO_URI: mongodb://mongo:27017/template

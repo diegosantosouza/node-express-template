@@ -2,6 +2,6 @@
   "restartable": "rs",
   "ignore": [".git", "node_modules/", "dist/", "coverage/"],
   "watch": ["src/"],
-  "exec": "node -r tsconfig-paths/register -r ts-node/register ./src/server.ts",
+  "exec": "node --inspect=0.0.0.0:9229 -r tsconfig-paths/register -r ts-node/register ./src/server.ts",
   "ext": "js,json,ts"
 }
