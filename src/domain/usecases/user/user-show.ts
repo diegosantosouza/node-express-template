@@ -7,5 +7,5 @@ export interface ShowUser {
 export namespace ShowUser {
   export type Params = UserModel['id']
 
-  export type Result = boolean
+  export type Result = UserModel
 }

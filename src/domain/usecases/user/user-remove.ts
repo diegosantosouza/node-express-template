@@ -1,7 +1,7 @@
 import { UserModel } from "@/domain/models/user";
 
 export interface DeleteUser {
-  delete: (params: DeleteUser.Params) => Promise<DeleteUser.Result>;
+  delete: (param: DeleteUser.Params) => Promise<DeleteUser.Result>;
 }
 
 export namespace DeleteUser {

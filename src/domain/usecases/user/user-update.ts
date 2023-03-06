@@ -1,7 +1,7 @@
 import { UserModel } from "@/domain/models/user";
 
 export interface UpdateUser {
-  update: (params: UpdateUser.Params) => Promise<UpdateUser.Result>;
+  update: (data: UpdateUser.Params) => Promise<UpdateUser.Result>;
 }
 
 export namespace UpdateUser {
