@@ -8,10 +8,22 @@
     "strict": true /* Enable all strict type-checking options. */,
     "skipLibCheck": true /* Skip type checking all .d.ts files. */,
     "paths": {
-      "@/*": ["*"],
-      "@/tests/*": ["../tests/*"]
+      "@/*": [
+        "*"
+      ],
+      "@/tests/*": [
+        "../tests/*"
+      ]
     },
     "baseUrl": "src",
-    "rootDirs": ["src", "tests"]
-  }
+    "rootDirs": [
+      "src",
+      "tests"
+    ]
+  },
+  "include": [
+    "src",
+    "tests"
+  ],
+  "exclude": []
 }

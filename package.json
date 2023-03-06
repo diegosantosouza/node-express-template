@@ -18,6 +18,7 @@
   "author": "diegosantos.s26@gmail.com",
   "license": "ISC",
   "devDependencies": {
+    "@faker-js/faker": "^7.6.0",
     "@types/cors": "^2.8.13",
     "@types/express": "^4.17.15",
     "@types/jest": "^29.2.4",
