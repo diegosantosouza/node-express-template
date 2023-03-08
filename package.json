@@ -11,7 +11,8 @@
     "test": "jest --passWithNoTests",
     "test:watch": "yarn test --watch",
     "test:staged": "yarn test --findRelatedTests",
-    "test:push": "yarn test --coverage",
+    "test:ci": "yarn test -- --coverage",
+    "test:coveralls": "yarn test:ci && coveralls < coverage/lcov.info",
     "lint:fix": "eslint . --ext .ts --fix"
   },
   "keywords": [],
