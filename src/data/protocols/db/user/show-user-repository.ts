@@ -1,4 +1,3 @@
-import { UserModel } from "@/domain/models/user"
 import { ShowUser } from "@/domain/usecases/user"
 
 export interface ShowUserRepository {
@@ -7,5 +6,5 @@ export interface ShowUserRepository {
 
 export namespace ShowUserRepository {
   export type Params = ShowUser.Params
-  export type Result = UserModel
+  export type Result = ShowUser.Result
 }
