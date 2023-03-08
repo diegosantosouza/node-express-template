@@ -5,7 +5,7 @@ export interface IndexUser {
 }
 
 export namespace IndexUser {
-  export type Params = Partial<Omit<UserModel, 'id' | 'password'>>
+  export type Params = Partial<Omit<UserModel, 'password'>>
 
-  export type Result = UserModel[]
+  export type Result = Array<Omit<UserModel, 'password'>>
 }
