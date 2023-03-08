@@ -1,28 +1,40 @@
-import mongoose, { Collection, Connection } from 'mongoose'
+import mongoose, { Mongoose } from 'mongoose'
 
-class MongoHelper {
-  private connection: Connection | null
+const {
+  MONGO_DEBUG,
+  MONGO_URI = `${process.env.MONGO_URI}`,
+} = process.env
 
-  constructor() {
-    this.connection = null
-  }
+export default class MongoHelper {
+  private static connection: Mongoose | null = null
 
-  async connect(uri: string) {
-    await mongoose.connect(uri)
-    this.connection = mongoose.connection
-  }
-
-  async disconnect() {
-    await mongoose.disconnect()
-    this.connection = null
-  }
-
-  getCollection(name: string): Collection | null {
+  static async connect(uri = MONGO_URI): Promise<void> {
     if (!this.connection) {
-      return null
+      try {
+        mongoose.set('debug', MONGO_DEBUG === 'true')
+        this.connection = await mongoose.connect(uri)
+        console.debug('MongoDB connected successfully.')
+      } catch (error) {
+        console.error('MongoDB connection error: ', error)
+        throw error
+      }
     }
-    return this.connection.collection(name)
+  }
+
+  static async disconnect(): Promise<void> {
+    if (this.connection) {
+      try {
+        await this.connection.disconnect()
+        console.debug('MongoDB disconnected')
+      } catch (error) {
+        console.error('MongoDB disconnect error: ', error)
+        throw error
+      }
+      this.connection = null
+    }
+  }
+
+  static getConnectionState(): number {
+    return mongoose.connection.readyState
   }
 }
-
-export default MongoHelper
