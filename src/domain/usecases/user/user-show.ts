@@ -7,5 +7,5 @@ export interface ShowUser {
 export namespace ShowUser {
   export type Params = UserModel['id']
 
-  export type Result = Omit<UserModel, 'password'>
+  export type Result = Omit<UserModel, 'password'> | null
 }

@@ -1,7 +1,7 @@
 import { UpdateUser } from "@/domain/usecases/user"
 
 export interface UpdateUserRepository {
-  update: (data: UpdateUserRepository.Params) => Promise<UpdateUserRepository.Result>
+  update: (params: UpdateUserRepository.Params) => Promise<UpdateUserRepository.Result>
 }
 
 export namespace UpdateUserRepository {

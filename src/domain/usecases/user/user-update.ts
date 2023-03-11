@@ -5,7 +5,7 @@ export interface UpdateUser {
 }
 
 export namespace UpdateUser {
-  export type Params = Partial<Omit<UserModel, 'id'>>
+  export type Params = { id: UserModel['id'], data: Partial<Omit<UserModel, 'id'>> }
 
-  export type Result = Omit<UserModel, 'password'>
+  export type Result = Omit<UserModel, 'password'> | null
 }

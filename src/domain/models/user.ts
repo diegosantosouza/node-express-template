@@ -3,7 +3,7 @@ import { BaseModel } from "./base-model"
 export interface UserModel extends BaseModel {
   firstName: string
   lastName: string
-  birthDate: Date
+  birthDate?: Date
   email: string
   password: string
   roles: Roles[]

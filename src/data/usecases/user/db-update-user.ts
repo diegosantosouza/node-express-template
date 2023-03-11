@@ -5,8 +5,8 @@ export class DbUpdateUser implements UpdateUser {
   constructor(
     private readonly updateUserRepository: UpdateUserRepository
   ) { }
-  async update(data: UpdateUser.Params): Promise<UpdateUser.Result> {
-    const user = await this.updateUserRepository.update(data)
+  async update(params: UpdateUser.Params): Promise<UpdateUser.Result> {
+    const user = await this.updateUserRepository.update(params)
     return user
   }
 
