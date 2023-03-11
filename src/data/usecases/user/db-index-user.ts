@@ -1,5 +1,5 @@
-import { IndexUserRepository } from "@/data/protocols/db/user";
-import { IndexUser } from "@/domain/usecases/user";
+import { IndexUserRepository } from "@/data/protocols/db/user"
+import { IndexUser } from "@/domain/usecases/user"
 
 export class DbIndexUser implements IndexUser {
   constructor(

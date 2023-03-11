@@ -1,4 +1,4 @@
-import { IndexUser } from "@/domain/usecases/user"
+import { IndexUser } from '@/domain/usecases/user'
 
 export interface IndexUserRepository {
   index: (params: IndexUserRepository.Params) => Promise<IndexUserRepository.Result>
