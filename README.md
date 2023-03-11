@@ -12,3 +12,14 @@ docker-compose up -d
 ```
 http://localhost:3000
 ```
+
+## To implement
+
+### - User
+
+- [ ] create
+- [ ] show
+- [ ] update
+- [ ] delete
+- [ ] index
+- [ ] find by email
