@@ -1,4 +1,4 @@
-import mongoose, { Mongoose } from 'mongoose'
+import mongoose, { Model, Mongoose, QueryOptions } from 'mongoose'
 
 const {
   MONGO_DEBUG,
@@ -31,6 +31,44 @@ export default class MongoHelper {
         throw error
       }
       this.connection = null
+    }
+  }
+
+  static async paginate(schema: Model<any>, params: QueryOptions) {
+    const { page = 1, limit = 100, where, orderBy } = params
+
+    const pipeline = [
+      { $match: where },
+      { $sort: orderBy },
+      { $skip: (page - 1) * limit },
+      { $limit: limit },
+      {
+        $facet: {
+          items: [{ $project: schema }],
+          pageInfo: [
+            { $count: 'totalItems' },
+            {
+              $project: {
+                totalItems: { $sum: 1 },
+                totalPages: { $ceil: { $divide: ['$totalItems', limit] } },
+              },
+            },
+          ],
+        },
+      },
+    ]
+
+    const [result] = await schema.aggregate(pipeline).exec()
+    const { items, pageInfo } = result
+
+    return {
+      items,
+      page,
+      limit,
+      totalItems: pageInfo[0].totalItems,
+      totalPages: pageInfo[0].totalPages,
+      hasNextPage: pageInfo[0].totalPages > page,
+      hasPrevPage: page > 1,
     }
   }
 
