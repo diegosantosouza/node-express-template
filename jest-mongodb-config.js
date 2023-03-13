@@ -7,7 +7,7 @@ module.exports = {
       dbName: 'jest',
     },
     binary: {
-      version: '6',
+      version: '6.0.0',
       skipMD5: true,
     },
     autoStart: false,
