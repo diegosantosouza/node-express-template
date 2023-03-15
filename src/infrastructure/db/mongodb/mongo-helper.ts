@@ -75,4 +75,9 @@ export default class MongoHelper {
   static getConnectionState(): number {
     return mongoose.connection.readyState
   }
+
+  static toObjectId(id: string): mongoose.Types.ObjectId {
+    const objectId = new mongoose.Types.ObjectId(id);
+    return objectId
+  }
 }
