@@ -2,7 +2,7 @@
   "name": "ts-node-project-setup",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/server.js",
+  "main": "dist/src/server.js",
   "scripts": {
     "build": "tsc && tsc-alias",
     "start": "node .",
@@ -12,6 +12,8 @@
     "test:watch": "yarn test --watch",
     "test:staged": "yarn test --findRelatedTests",
     "test:ci": "yarn test -- --coverage",
+    "test:unit": "yarn test -- --watch -c jest-unit-config.js",
+    "test:integration": "yarn test -- --watch -c jest-integration-config.js",
     "test:coveralls": "yarn test:ci && coveralls < coverage/lcov.info",
     "lint:fix": "eslint . --ext .ts --fix"
   },
@@ -27,6 +29,7 @@
     "@types/jest": "^29.2.4",
     "@types/morgan": "^1.9.4",
     "@types/node": "^18.11.17",
+    "@types/supertest": "^2.0.12",
     "@typescript-eslint/eslint-plugin": "^5.47.0",
     "@typescript-eslint/parser": "^5.47.0",
     "eslint": "^8.30.0",
@@ -38,6 +41,7 @@
     "mongodb-memory-server": "^8.12.0",
     "nodemon": "^2.0.20",
     "prettier": "^2.8.1",
+    "supertest": "^6.3.3",
     "ts-jest": "^29.0.3",
     "ts-node": "^10.9.1",
     "tsc-alias": "^1.8.2",
