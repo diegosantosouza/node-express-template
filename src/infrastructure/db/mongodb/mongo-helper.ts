@@ -1,4 +1,6 @@
-import mongoose, { Model, Mongoose, QueryOptions } from 'mongoose'
+import { PaginateResult } from '@/domain/usecases/paginate/paginate-result'
+import mongoose, { Mongoose, QueryOptions, Document } from 'mongoose'
+import { IModel } from './contracts/model-paginate'
 
 const {
   MONGO_DEBUG,
@@ -34,42 +36,20 @@ export default class MongoHelper {
     }
   }
 
-  static async paginate(schema: Model<any>, params: QueryOptions) {
-    const { page = 1, limit = 100, where, orderBy } = params
+  static async paginate<T extends Document, U>(query: any, schema: IModel<T>, params: QueryOptions): Promise<PaginateResult<U>> {
+    const { page = 1, limit = 10, lean = true, orderBy = {}, select = {} } = params
+    const customLabels = { docs: 'items', totalDocs: 'totalItems' }
 
-    const pipeline = [
-      { $match: where },
-      { $sort: orderBy },
-      { $skip: (page - 1) * limit },
-      { $limit: limit },
-      {
-        $facet: {
-          items: [{ $project: schema }],
-          pageInfo: [
-            { $count: 'totalItems' },
-            {
-              $project: {
-                totalItems: { $sum: 1 },
-                totalPages: { $ceil: { $divide: ['$totalItems', limit] } },
-              },
-            },
-          ],
-        },
-      },
-    ]
-
-    const [result] = await schema.aggregate(pipeline).exec()
-    const { items, pageInfo } = result
-
-    return {
-      items,
+    const paginateOptions: mongoose.PaginateOptions = {
       page,
       limit,
-      totalItems: pageInfo[0].totalItems,
-      totalPages: pageInfo[0].totalPages,
-      hasNextPage: pageInfo[0].totalPages > page,
-      hasPrevPage: page > 1,
+      customLabels,
+      lean,
+      sort: orderBy,
+      select
     }
+    const response = await schema.paginate<U>(query, paginateOptions)
+    return response
   }
 
   static getConnectionState(): number {

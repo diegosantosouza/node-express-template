@@ -1,7 +1,7 @@
 export interface PaginateOptions<T> {
-  where: PaginateOptions.Where<T>
-  page: number
-  limit: number
+  where?: PaginateOptions.Where<T>
+  page?: number
+  limit?: number
   select?: string
   orderBy?: any
 }

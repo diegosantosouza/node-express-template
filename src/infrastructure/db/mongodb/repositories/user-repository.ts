@@ -1,6 +1,7 @@
+import { UserModel } from '@/domain/models/user';
 import { CreateUserRepository, IndexUserRepository, RemoveUserRepository, ShowUserRepository, UpdateUserRepository } from "@/data/protocols/db/user"
 import MongoHelper from "../mongo-helper"
-import { UserSchema } from "../schemas/user"
+import { UserDoc, UserSchema } from "../schemas/user"
 
 export class UserRepository implements CreateUserRepository,
   RemoveUserRepository,
@@ -23,13 +24,13 @@ export class UserRepository implements CreateUserRepository,
   }
 
   async update({ id, data }: UpdateUserRepository.Params): Promise<UpdateUserRepository.Result> {
-    // const objectId = MongoHelper.toObjectId(id)
     const user = await UserSchema.findByIdAndUpdate(id, data, { new: true })
     return user ? user.toObject() : null
   }
 
-  async index(params: IndexUserRepository.Params): Promise<IndexUserRepository.Result> {
-    const users = await MongoHelper.paginate(UserSchema, params)
+  async index(params: IndexUserRepository.Params = {}): Promise<IndexUserRepository.Result> {
+    const select = { select: '-password' }
+    const users = await MongoHelper.paginate<UserDoc, UserModel>(params.where, UserSchema, { ...params, ...select })
     return users
   }
 

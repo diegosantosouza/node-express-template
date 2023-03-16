@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-empty-interface */
+import { IModel } from './../contracts/model-paginate'
 import { Gender, Roles, UserModel } from "@/domain/models/user"
 import { Model, model, Schema, Document } from "mongoose"
+import * as paginate from 'mongoose-paginate-v2'
 
 export interface UserDoc extends Document<UserModel> { }
 
@@ -50,8 +52,9 @@ userSchema.set('toObject', {
     return ret;
   },
 })
+userSchema.plugin(paginate)
 
-export const UserSchema: Model<UserDoc> = model<UserDoc>(
+export const UserSchema = model<UserDoc>(
   'User',
   userSchema,
-)
+) as IModel<UserDoc>
