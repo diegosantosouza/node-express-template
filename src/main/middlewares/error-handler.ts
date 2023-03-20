@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 
-const errorHandler = (
+export const errorHandler = (
   error: Error,
   request: Request,
   response: Response,
@@ -9,5 +9,3 @@ const errorHandler = (
 ): Response => {
   return response.status(500).json('Server error')
 }
-
-export default errorHandler

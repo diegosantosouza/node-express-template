@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 
-const apiVersion = (
+export const apiVersion = (
   request: Request,
   response: Response,
   next: NextFunction,
@@ -8,5 +8,3 @@ const apiVersion = (
   response.setHeader('X-API-VERSION', process.env.npm_package_version || '')
   next()
 }
-
-export default apiVersion
