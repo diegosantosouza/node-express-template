@@ -13,13 +13,13 @@
     ],
     "paths": {
       "@/*": [
-        "*"
+        "src/*"
       ],
       "@/tests/*": [
-        "../tests/*"
+        "tests/*"
       ]
     },
-    "baseUrl": "src",
+    "baseUrl": "./",
     "rootDirs": [
       "src",
       "tests"
