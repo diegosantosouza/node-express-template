@@ -17,6 +17,12 @@
       "skipFiles": [
         "<node_internals>/**"
       ]
+    },
+    {
+      "command": "yarn start:dev",
+      "name": "Run dev",
+      "request": "launch",
+      "type": "node-terminal"
     }
   ]
 }
