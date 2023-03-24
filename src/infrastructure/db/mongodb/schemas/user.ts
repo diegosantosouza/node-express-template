@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 import { IModel } from './../contracts/model-paginate'
 import { Gender, Roles, UserModel } from "@/domain/models/user"
-import { Model, model, Schema, Document } from "mongoose"
+import { model, Schema, Document } from "mongoose"
 import * as paginate from 'mongoose-paginate-v2'
 
 export interface UserDoc extends Document<UserModel> { }
@@ -48,7 +48,6 @@ userSchema.set('toObject', {
     ret.id = ret._id;
     delete ret._id;
     delete ret.__v;
-    delete ret.password;
     return ret;
   },
 })
