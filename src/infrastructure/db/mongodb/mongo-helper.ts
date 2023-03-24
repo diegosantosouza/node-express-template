@@ -37,14 +37,14 @@ export default class MongoHelper {
   }
 
   static async paginate<T extends Document, U>(query: any, schema: IModel<T>, params: QueryOptions): Promise<PaginateResult<U>> {
-    const { page = 1, limit = 10, lean = true, orderBy = {}, select = {} } = params
+    const { page = 1, limit = 10, orderBy = {}, select = {} } = params
     const customLabels = { docs: 'items', totalDocs: 'totalItems' }
 
     const paginateOptions: mongoose.PaginateOptions = {
       page,
       limit,
       customLabels,
-      lean,
+      lean: true,
       sort: orderBy,
       select
     }
