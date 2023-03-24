@@ -19,6 +19,7 @@ export const storeRules = [
     .isEmail()
     .normalizeEmail(),
   body('password')
+    .isString()
     .isLength({ min: 6, max: 100 }),
   body('roles')
     .isArray(),
@@ -66,6 +67,7 @@ export const updateRules = [
     .normalizeEmail(),
   body('password')
     .optional()
+    .isString()
     .isLength({ min: 6, max: 100 }),
   body('roles')
     .optional()
@@ -77,3 +79,11 @@ export const updateRules = [
     .optional()
     .isIn(userGender),
 ].concat(idRule)
+
+export const signInRules = [
+  body('email')
+    .isEmail()
+    .normalizeEmail(),
+  body('password')
+    .isString()
+]
