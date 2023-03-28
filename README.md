@@ -17,9 +17,9 @@ http://localhost:3000
 
 ### - User
 
-- [ ] create
-- [ ] show
-- [ ] update
-- [ ] delete
-- [ ] index
-- [ ] find by email
+- [x] create
+- [x] show
+- [x] update
+- [x] delete
+- [x] index
+- [x] find by email
