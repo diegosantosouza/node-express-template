@@ -6,8 +6,8 @@ const { JWT_SECRET = 'any_key' } = process.env
 export class JwtAdapter implements Encrypter, Decrypter {
   constructor(private readonly secret: string = JWT_SECRET) { }
 
-  async encrypt(plaintext: string): Promise<string> {
-    return jwt.sign({ id: plaintext }, this.secret)
+  async encrypt(payload: object): Promise<string> {
+    return jwt.sign(payload, this.secret)
   }
 
   async decrypt(ciphertext: string): Promise<string> {
