@@ -4,6 +4,5 @@ import { JwtAdapter } from "@/infrastructure/cryptography"
 
 export const makeDbLoadAccountByToken = (): LoadAccountByToken => {
   const jwtAdapter = new JwtAdapter()
-  const accountMongoRepository = new AccountMongoRepository()
-  return new DbLoadAccountByToken(jwtAdapter, accountMongoRepository)
+  return new DbLoadAccountByToken(jwtAdapter)
 }
