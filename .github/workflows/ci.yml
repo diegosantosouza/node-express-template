@@ -14,6 +14,9 @@ jobs:
     strategy:
       matrix:
         node-version: [18.x]
+        test_number:
+            - 1
+            - 2
 
     steps:
     - name: Checkout
@@ -37,8 +40,8 @@ jobs:
       env:
         CI: true
 
-    - name: Test ${{ matrix.node-version }}
-      run: make test-coverage-${{ matrix.node-version }}
+    - name: Test ${{ matrix.test_number }}
+      run: make test-coverage-${{ matrix.test_number }}
     - name: Coveralls Parallel
       uses: coverallsapp/github-action@v2
       with:
