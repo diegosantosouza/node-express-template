@@ -37,15 +37,13 @@ jobs:
       env:
         CI: true
 
-    - name: Make test-coverage
-      run: make test-coverage
-
+    - name: Test ${{ matrix.test_number }}
+      run: make test-coverage-${{ matrix.test_number }}
     - name: Coveralls Parallel
       uses: coverallsapp/github-action@v2
       with:
         flag-name: run-${{ join(matrix.*, '-') }}
         parallel: true
-
 
   build:
     name: Build a docker image
