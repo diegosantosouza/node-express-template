@@ -23,7 +23,7 @@ const createUsers = async (quantity: number) => {
   }
 }
 
-const newLogedUser = async (): Promise<Authentication.Result> => {
+const newLogedUser = async (role: string): Promise<Authentication.Result> => {
   const usersRepository = makeUserRepository()
   const password = await hash('12345678', 12)
   await usersRepository.create({
@@ -32,7 +32,7 @@ const newLogedUser = async (): Promise<Authentication.Result> => {
     birthDate: new Date('1992-11-07'),
     email: 'diego@gmail.com',
     password,
-    roles: [Roles.ADMIN],
+    roles: [role as Roles],
     gender: Gender.MALE,
   })
   const result = await request(app)
@@ -83,16 +83,29 @@ describe('User routes', () => {
   })
 
   describe('PUT /user', () => {
-    test('Should return 404 if id not exist', async () => {
+    test('Should return 403 if without access token', async () => {
       const invalidId = '641b12c5f99b38143875fb9e'
       await request(app)
         .put(`/user/${invalidId}`)
         .send({
           firstName: 'changed_name',
-        }).expect(404)
+        }).expect(403)
+    })
+
+    test('Should return 404 if id not exist', async () => {
+      const newAccount = await newLogedUser('USER')
+      const invalidId = '641b12c5f99b38143875fb9e'
+      await request(app)
+        .put(`/user/${invalidId}`)
+        .send({
+          firstName: 'changed_name',
+        })
+        .set({authorization: `Bearer ${newAccount?.accessToken}`})
+        .expect(404)
     })
 
     test('Should return 200 on success', async () => {
+      const newAccount = await newLogedUser('USER')
       await createUsers(1)
       const usersRepository = makeUserRepository()
       const { items } = await usersRepository.index()
@@ -101,7 +114,9 @@ describe('User routes', () => {
         .put(`/user/${user.id}`)
         .send({
           firstName: 'changed_name',
-        }).expect(200)
+        })
+        .set({authorization: `Bearer ${newAccount?.accessToken}`})
+        .expect(200)
     })
   })
 
@@ -138,7 +153,7 @@ describe('User routes', () => {
 
   describe('DELETE /user/id', () => {
     test('Should return 204 if valid token with ADMIN permission', async () => {
-      const newAccount = await newLogedUser()
+      const newAccount = await newLogedUser('ADMIN')
       const usersRepository = makeUserRepository()
       const { items } = await usersRepository.index()
       const user = items[0]

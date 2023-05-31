@@ -8,16 +8,15 @@ import { makeUserUpdateController } from '../factories/controllers/user/user-upd
 import { makeUserShowController } from '../factories/controllers/user/user-show-controller-factory'
 import { makeUserRemoveController } from '../factories/controllers/user/user-remove-controller-factory'
 import { makeSignInController } from '../factories/controllers/user/signin-controller-factory'
-import { adaptMiddleware } from '../adapters/express-middleware-adapter'
-import { makeAuthMiddleware } from '../factories/middlewares/auth-middleware-factory'
+import { adminAuth } from '../middlewares/admin-auth'
+import { auth } from '../middlewares/auth'
 
 const userRouter = Router()
-const adminAuth = adaptMiddleware(makeAuthMiddleware('ADMIN'))
 
 userRouter.post('/user', storeRules, requestValidator, adaptRoute(makeUserCreateController()))
 userRouter.get('/user', indexRules, requestValidator, adaptRoute(makeUserIndexController()))
 userRouter.get('/user/:id', idRule, requestValidator, adaptRoute(makeUserShowController()))
-userRouter.put('/user/:id', updateRules, requestValidator, adaptRoute(makeUserUpdateController()))
+userRouter.put('/user/:id', updateRules, requestValidator, auth, adaptRoute(makeUserUpdateController()))
 userRouter.delete('/user/:id', idRule, requestValidator, adminAuth, adaptRoute(makeUserRemoveController()))
 
 userRouter.post('/signin', signInRules, requestValidator, adaptRoute(makeSignInController()))
