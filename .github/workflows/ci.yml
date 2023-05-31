@@ -13,8 +13,7 @@ jobs:
 
     strategy:
       matrix:
-        test_number:
-            - 1
+        node-version: [18.x]
 
     steps:
     - name: Checkout
@@ -22,10 +21,10 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: Use Node.js 18.x
-      uses: actions/setup-node@v1
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
       with:
-        node-version: 18.x
+        node-version: ${{ matrix.node-version }}
     
     - name: Install dependencies
       run: yarn install
@@ -37,16 +36,13 @@ jobs:
       run: yarn lint:fix
       env:
         CI: true
-
-    - name: Test ${{ matrix.test_number }}
-      run: make test-coverage-${{ matrix.test_number }}
-    - name: Coveralls Parallel
+    
+    - name: Coveralls
       uses: coverallsapp/github-action@v2
       with:
-        flag-name: run-${{ join(matrix.*, '-') }}
+        github-token: ${{ secrets.COVERALLS_REPO_TOKEN }}
+        flag-name: ${{matrix.os}}-node-${{ matrix.node }}
         parallel: true
-      env:
-          COVERALLS_SERVICE_NUMBER: ${{ github.sha }}
 
   build:
     name: Build a docker image
@@ -60,12 +56,11 @@ jobs:
       run: docker build -t node-template/ci .
 
   finish:
-    needs: test
-    if: ${{ always() }}
-    runs-on: ubuntu-latest
-    steps:
-    - name: Coveralls Finished
-      uses: coverallsapp/github-action@v2
-      with:
-        parallel-finished: true
-        carryforward: "run-1,run-2"
+      needs: test
+      runs-on: ubuntu-latest
+      steps:
+        - name: Coveralls Finished
+          uses: coverallsapp/github-action@v2
+          with:
+            github-token: ${{ secrets.COVERALLS_REPO_TOKEN }}
+            parallel-finished: true
