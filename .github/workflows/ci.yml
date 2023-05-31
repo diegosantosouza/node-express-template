@@ -26,9 +26,9 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - run: npm ci
-    - run: npm run test:coveralls --forceExit
-    - run: npm run lint:fix
+    - run: yarn ci
+    - run: yarn test:coveralls --forceExit
+    - run: yarn lint:fix
       env:
         CI: true
 

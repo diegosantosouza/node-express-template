@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es2019" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
+    "target": "es2021" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
     "module": "CommonJS" /* Specify what module code is generated. */,
     "outDir": "./dist" /* Specify the root folder within your source files. */,
     "moduleResolution": "node" /* Specify how TypeScript looks up a file from a given module specifier. */,

@@ -9,5 +9,4 @@ export class DbUpdateUser implements UpdateUser {
     const user = await this.updateUserRepository.update(params)
     return user
   }
-
 }

@@ -12,8 +12,12 @@ export class AuthMiddleware implements Middleware {
 
   async handle(request: AuthMiddleware.Request): Promise<HttpResponse> {
     try {
-      const { token } = request.headers
+      const authentication = request.headers['authorization']
+      if(!authentication) return forbidden(new AccessDeniedError())
+
+      const [, token] = authentication.split(' ')
       if (token) {
+
         const account = await this.loadAccountByToken.load(token, this.role)
         if (account) return ok({ user: account })
       }
@@ -27,7 +31,7 @@ export class AuthMiddleware implements Middleware {
 export namespace AuthMiddleware {
   export type Request = {
     headers: {
-      token?: string
+      authorization?: string
     }
   }
 }

@@ -1,20 +1,21 @@
 import { Decrypter } from '@/data/protocols/cryptografy'
+import { Roles } from '@/domain/models/user';
 import { LoadAccountByToken } from '@/domain/usecases/user'
 
 export class DbLoadAccountByToken implements LoadAccountByToken {
   constructor(
-    private readonly decrypter: Decrypter,
+    private readonly decrypter: Decrypter<LoadAccountByToken.Result>,
   ) { }
 
   async load(accessToken: string, role?: string): Promise<LoadAccountByToken.Result> {
     try {
       const token = await this.decrypter.decrypt(accessToken)
       if (token) {
-        const decodedToken = JSON.parse(token)
-        if (role && !decodedToken.roles.includes(role)) {
+        const tokenRoles = token.roles
+        if (role && !tokenRoles.includes(role as Roles)) {
           return null;
         }
-        return decodedToken as LoadAccountByToken.Result
+        return token
       }
     } catch (error) {
       return null

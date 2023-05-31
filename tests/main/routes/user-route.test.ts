@@ -5,6 +5,9 @@ import { setupApp } from '@/main/config/app'
 import { mockCreateUserParams } from '@/tests/domain/mocks/user/mock-user';
 import { Express } from 'express'
 import * as request from 'supertest'
+import { hash } from 'bcrypt'
+import { Gender, Roles } from '@/domain/models/user';
+import { Authentication } from '@/domain/usecases/authentication';
 
 let app: Express
 
@@ -18,6 +21,27 @@ const createUsers = async (quantity: number) => {
     const createUserParams = mockCreateUserParams()
     await sut.create(createUserParams)
   }
+}
+
+const newLogedUser = async (): Promise<Authentication.Result> => {
+  const usersRepository = makeUserRepository()
+  const password = await hash('12345678', 12)
+  await usersRepository.create({
+    firstName: 'diego',
+    lastName: 'souza',
+    birthDate: new Date('1992-11-07'),
+    email: 'diego@gmail.com',
+    password,
+    roles: [Roles.ADMIN],
+    gender: Gender.MALE,
+  })
+  const result = await request(app)
+    .post('/signin')
+    .send({
+      email: 'diego@gmail.com',
+      password: '12345678'
+    })
+  return result.body
 }
 
 describe('User routes', () => {
@@ -101,14 +125,27 @@ describe('User routes', () => {
   })
 
   describe('DELETE /user/id', () => {
-    test('Should return 200 on success', async () => {
+    test('Should return 403 if without access token', async () => {
       await createUsers(1)
       const usersRepository = makeUserRepository()
       const { items } = await usersRepository.index()
       const user = items[0]
       await request(app)
         .delete(`/user/${user.id}`)
-        .expect(200)
+        .expect(403)
+    })
+  })
+
+  describe('DELETE /user/id', () => {
+    test('Should return 204 if valid token with ADMIN permission', async () => {
+      const newAccount = await newLogedUser()
+      const usersRepository = makeUserRepository()
+      const { items } = await usersRepository.index()
+      const user = items[0]
+      await request(app)
+        .delete(`/user/${user.id}`)
+        .set({authorization: `Bearer ${newAccount?.accessToken}`})
+        .expect(204)
     })
   })
 })
