@@ -1,6 +1,5 @@
 name: Node.js CI
 on:
-  # Triggers the workflow on push or pull request events but only for the main branch
   push:
     branches:
       - master
@@ -26,14 +25,18 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - run: yarn install
-    - run: yarn test:coveralls --forceExit
-    - run: yarn lint:fix
+    
+    - name: Install dependencies
+      run: yarn install
+    
+    - name: Run tests
+      run: yarn test:coveralls --forceExit
+    
+    - name: Lint
+      run: yarn lint:fix
       env:
         CI: true
-
-    - name: Test ${{ matrix.test_number }}
-      run: make test-coverage-${{ matrix.test_number }}
+    
     - name: Coveralls Parallel
       uses: coverallsapp/github-action@v2
       with:
