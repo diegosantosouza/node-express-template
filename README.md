@@ -31,11 +31,11 @@ http://localhost:3000
 
 File                                    | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
 ----------------------------------------|---------|----------|---------|---------|-------------------
-All files                               |   93.84 |    95.45 |   87.14 |   93.75 |                   
+All files                               |   94.92 |    95.45 |   91.42 |   94.92 |                   
  data/usecases/user                     |     100 |      100 |     100 |     100 |                   
   db-authentication.ts                  |     100 |      100 |     100 |     100 |                   
   db-create-user.ts                     |     100 |      100 |     100 |     100 |                   
-  db-index-user.ts                      |     100 |      100 |     100 |     100 | 
+  db-index-user.ts                      |     100 |      100 |     100 |     100 |                   
   db-remove-user.ts                     |     100 |      100 |     100 |     100 | 
   db-show-user.ts                       |     100 |      100 |     100 |     100 | 
   db-update-user.ts                     |     100 |      100 |     100 |     100 | 
@@ -54,8 +54,8 @@ All files                               |   93.84 |    95.45 |   87.14 |   93.75
   user-repository.ts                    |     100 |      100 |     100 |     100 | 
  infrastructure/db/mongodb/schemas      |     100 |      100 |     100 |     100 | 
   user.ts                               |     100 |      100 |     100 |     100 | 
- infrastructure/log                     |    62.5 |      100 |      40 |    62.5 | 
-  winston-adapter.ts                    |    62.5 |      100 |      40 |    62.5 | 25-33
+ infrastructure/log                     |     100 |      100 |     100 |     100 | 
+  winston-adapter.ts                    |     100 |      100 |     100 |     100 | 
  presentation/controllers/healthcheck   |     100 |      100 |     100 |     100 | 
   healthcheck.controller.ts             |     100 |      100 |     100 |     100 | 
  presentation/controllers/user          |     100 |      100 |     100 |     100 | 
@@ -75,7 +75,8 @@ All files                               |   93.84 |    95.45 |   87.14 |   93.75
   unauthorized-error.ts                 |     100 |      100 |     100 |     100 | 
  presentation/helpers                   |   96.15 |      100 |    87.5 |     100 | 
   http-helper.ts                        |      96 |      100 |    87.5 |     100 | 
-  index.ts                              |     100 |      100 |     100 |     100 | 
+  index.ts                              |     100 |      100 |     100 |     100 |                   
  presentation/middlewares               |     100 |      100 |     100 |     100 | 
   auth-middleware.ts                    |     100 |      100 |     100 |     100 | 
   index.ts                              |     100 |      100 |     100 |     100 | 
+----------------------------------------|---------|----------|---------|---------|-------------------
