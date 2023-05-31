@@ -1,3 +1,5 @@
+[![Coverage Status](https://coveralls.io/repos/github/diegosantosouza/node-express-template/badge.svg)](https://coveralls.io/github/diegosantosouza/node-express-template)
+
 # ts-node-project-setup
 
 ## Run dev
