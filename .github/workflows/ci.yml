@@ -37,8 +37,8 @@ jobs:
       env:
         CI: true
 
-    - name: Test ${{ matrix.test_number }}
-      run: make test-coverage-${{ matrix.test_number }}
+    - name: Test ${{ matrix.node-version }}
+      run: make test-coverage-${{ matrix.node-version }}
     - name: Coveralls Parallel
       uses: coverallsapp/github-action@v2
       with:
