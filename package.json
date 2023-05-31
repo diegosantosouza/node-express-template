@@ -1,7 +1,7 @@
 {
   "name": "ts-node-project-setup",
   "version": "1.0.0",
-  "description": "",
+  "description": "Boilerplate for projects",
   "main": "dist/src/server.js",
   "scripts": {
     "build": "tsc && tsc-alias",
