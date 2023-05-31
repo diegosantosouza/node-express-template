@@ -71,7 +71,7 @@ describe('DbLoadAccountByToken Usecase', () => {
   test('Should return null if role fail', async () => {
     const { sut, decrypterStub } = makeSut()
     const accountUser = mockUserResultModel()
-    jest.spyOn(decrypterStub, 'decrypt').mockReturnValueOnce(new Promise(resolve => resolve(JSON.stringify(accountUser))))
+    jest.spyOn(decrypterStub, 'decrypt').mockReturnValueOnce(new Promise(resolve => resolve(accountUser)))
     const account = await sut.load('any_token', 'any_role')
     expect(account).toBeNull()
   })
