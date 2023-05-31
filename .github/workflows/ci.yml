@@ -15,7 +15,6 @@ jobs:
       matrix:
         test_number:
             - 1
-            - 2
 
     steps:
     - name: Checkout
@@ -46,6 +45,8 @@ jobs:
       with:
         flag-name: run-${{ join(matrix.*, '-') }}
         parallel: true
+      env:
+          COVERALLS_SERVICE_NUMBER: ${{ github.sha }}
 
   build:
     name: Build a docker image
