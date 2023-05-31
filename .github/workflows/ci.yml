@@ -30,13 +30,16 @@ jobs:
       run: yarn install
     
     - name: Run tests
-      run: yarn test:coveralls --forceExit
+      run: yarn test:ci --forceExit
     
     - name: Lint
       run: yarn lint:fix
       env:
         CI: true
-    
+
+    - name: Make test-coverage
+      run: make test-coverage
+
     - name: Coveralls Parallel
       uses: coverallsapp/github-action@v2
       with:
