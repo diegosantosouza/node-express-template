@@ -11,7 +11,7 @@ const makeDecrypter = () : Decrypter => {
   class DecrypterStub implements Decrypter {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async decrypt(value: string): Promise<string> {
-      return new Promise(resolve => resolve('any_value'))
+      return Promise.resolve('any_value')
     }
   }
   return new DecrypterStub()
@@ -45,7 +45,7 @@ describe('DbLoadAccountByToken Usecase', () => {
 
   test('Should return null if Decrypter returns null', async () => {
     const { sut, decrypterStub } = makeSut()
-    jest.spyOn(decrypterStub, 'decrypt').mockReturnValueOnce(new Promise(resolve => resolve('')))
+    jest.spyOn(decrypterStub, 'decrypt').mockReturnValueOnce(Promise.resolve(''))
     const account = await sut.load('any_token', 'any_role')
     expect(account).toBeNull()
   })
@@ -53,7 +53,7 @@ describe('DbLoadAccountByToken Usecase', () => {
   test('Should return user account on success', async () => {
     const { sut, decrypterStub } = makeSut()
     const accountUser = mockUserResultModel()
-    jest.spyOn(decrypterStub, 'decrypt').mockReturnValueOnce(new Promise(resolve => resolve(accountUser)))
+    jest.spyOn(decrypterStub, 'decrypt').mockReturnValueOnce(Promise.resolve(accountUser))
     const account = await sut.load('any_token', accountUser.roles[0])
     expect(account).toEqual({
       id: accountUser.id,
@@ -71,7 +71,7 @@ describe('DbLoadAccountByToken Usecase', () => {
   test('Should return null if role fail', async () => {
     const { sut, decrypterStub } = makeSut()
     const accountUser = mockUserResultModel()
-    jest.spyOn(decrypterStub, 'decrypt').mockReturnValueOnce(new Promise(resolve => resolve(accountUser)))
+    jest.spyOn(decrypterStub, 'decrypt').mockReturnValueOnce(Promise.resolve(accountUser))
     const account = await sut.load('any_token', 'any_role')
     expect(account).toBeNull()
   })
