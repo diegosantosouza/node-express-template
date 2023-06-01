@@ -1,6 +1,6 @@
-import { unauthorized, badRequest, serverError, notFound } from '@/main/docs/components';
-import { healthcheckSchema, signinParamsSchema, signinSchema, errorSchema } from '@/main/docs/schemas';
-import { healthcheckPath, signinPath } from '@/main/docs/paths'
+import { unauthorized, badRequest, serverError, notFound, forbidden } from '@/main/docs/components'
+import { healthcheckSchema, signinParamsSchema, signinSchema, errorSchema, userSchema, usersSchema, roleSchema, genderSchema, bearerAuthSchema, addUserSchema } from '@/main/docs/schemas'
+import { healthcheckPath, signinPath, userPath, userIdPath } from '@/main/docs/paths'
 export default {
   openapi: '3.0.0',
   info: {
@@ -14,20 +14,36 @@ export default {
       description: "Base path",
     }
   ],
+  tags: [
+    { name: 'Healthcheck' },
+    { name: 'Signin' },
+    { name: 'User' }
+  ],
   paths: {
     '/healthcheck': healthcheckPath,
     '/signin': signinPath,
+    '/user': userPath,
+    '/user/{id}': userIdPath,
   },
   schemas: {
     healthcheck: healthcheckSchema,
     signinParams: signinParamsSchema,
     signin: signinSchema,
     error: errorSchema,
+    user: userSchema,
+    users: usersSchema,
+    role: roleSchema,
+    gender: genderSchema,
+    addUser: addUserSchema,
   },
   components: {
+    securitySchemes: {
+      bearerAuth: bearerAuthSchema,
+    },
     badRequest,
     unauthorized,
     serverError,
     notFound,
+    forbidden,
   }
 }
