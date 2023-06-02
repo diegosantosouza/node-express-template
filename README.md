@@ -13,6 +13,7 @@ docker-compose up -d
 
 ```
 http://localhost:3000
+http://localhost:3000/api-docs
 ```
 
 ## To implement
