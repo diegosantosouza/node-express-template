@@ -8,6 +8,20 @@ import { WinstonLoggerAdapter } from './infrastructure/log/winston-adapter'
 const port = process.env.PORT || 3000
 const logService = new WinstonLoggerAdapter()
 
+
+async function gracefulShutdown(server: any) {
+  try {
+    await MongoHelper.disconnect()
+    server.close(() => {
+      logService.info('Server exited with success')
+      process.exit(ExitStatus.Success)
+    })
+  } catch (error) {
+    logService.error('Server exited with error:', error)
+    process.exit(ExitStatus.Failure)
+  }
+}
+
 process.on('uncaughtException', (err) => {
   logService.error('Uncaught Exception:', err)
   process.exit(ExitStatus.Failure)
@@ -27,19 +41,19 @@ async function startServer() {
     })
 
     const exitSignals: NodeJS.Signals[] = ['SIGINT', 'SIGTERM', 'SIGQUIT']
-    exitSignals.map((sig) => process.on(sig, async () => {
-      try {
-        server.close()
-        logService.info('Server exited with success')
-        process.exit(ExitStatus.Success)
-      } catch (error) {
-        logService.error('Server exited with error:', error)
-        process.exit(ExitStatus.Failure)
-      }
-    }))
+    exitSignals.forEach((sig) => {
+      process.on(sig, async () => {
+        try {
+          await gracefulShutdown(server)
+        } catch (error) {
+          logService.error('Error during graceful shutdown:', error)
+          process.exit(ExitStatus.Failure)
+        }
+      })
+    })
   } catch (error) {
-    logService.error('Failed to start server:', error)
-    process.exit(ExitStatus.Failure)
+    logService.error('Failed to start server:', error);
+    process.exit(ExitStatus.Failure);
   }
 }
 
