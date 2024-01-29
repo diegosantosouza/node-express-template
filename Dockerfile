@@ -2,7 +2,7 @@ FROM node:18-alpine as builder
 WORKDIR /app
 COPY . .
 RUN yarn install
-RUN yarn run build
+RUN yarn build
 
 FROM node:18-alpine
 ENV NODE_ENV=production
