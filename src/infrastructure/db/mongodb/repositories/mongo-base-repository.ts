@@ -32,7 +32,7 @@ export abstract class MongoBaseRepository<T extends Document> {
 
   async create(data: unknown): Promise<T> {
     const createdData = new this.model(data)
-    return createdData.save()
+    return createdData.save() as any
   }
 
   async update(id: string, data: Partial<T>): Promise<T | null> {
