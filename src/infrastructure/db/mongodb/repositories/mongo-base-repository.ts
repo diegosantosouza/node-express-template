@@ -43,8 +43,8 @@ export abstract class MongoBaseRepository<T extends Document> {
   }
 
   async delete(id: string): Promise<T | null> {
-    const deletedData = await this.model.findByIdAndDelete(id)
-    return deletedData
+    await this.model.findByIdAndDelete(id)
+    return null
   }
 
   async deleteMany(entityFilterQuery: FilterQuery<T>): Promise<boolean> {
