@@ -2,13 +2,16 @@ import { UpdateUserRepositorySpy } from "@/tests/data/usecases/user/mocks/mock-d
 import { UserUpdateController } from "@/presentation/controllers/user/user-update.controller";
 import { faker } from "@faker-js/faker";
 import { throwError } from "@/tests/domain/mocks/throw-error-helper";
-import { notFound, ok, serverError } from "@/presentation/helpers";
+import { badRequest, notFound, ok, serverError } from "@/presentation/helpers";
 import { ServerError } from "@/presentation/errors";
+import { ZodAdapter } from "@/infrastructure/validator/zod-adapter";
+import { HttpInputValidator } from "@/presentation/validation/http-input-validator";
+import { userUpdateSchema } from "@/infrastructure/validator/schemas/user-update-validation-schema";
 
 const mockRequest = (): UserUpdateController.Request => {
   return {
     params: {
-      id: faker.datatype.uuid(),
+      id: "647654181d2f0d23d9865081",
     },
     body: {
       firstName: faker.name.firstName(),
@@ -16,17 +19,37 @@ const mockRequest = (): UserUpdateController.Request => {
   }
 }
 
+const validationErrorResult =
+  [
+    {
+      path: [
+        "params",
+        "id"
+      ],
+      message: "Invalid ObjectId",
+      code: "custom",
+      expected: "",
+      received: ""
+    }
+  ]
+
 type SutTypes = {
   sut: UserUpdateController
   dbUserUpdateSpy: UpdateUserRepositorySpy
+  httpInputValidatorMock: HttpInputValidator
+  validatorMock: ZodAdapter
 }
 
 const makeSut = (): SutTypes => {
+  const validatorMock = new ZodAdapter(userUpdateSchema)
+  const httpInputValidatorMock = new HttpInputValidator(validatorMock)
   const dbUserUpdateSpy = new UpdateUserRepositorySpy()
-  const sut = new UserUpdateController(dbUserUpdateSpy)
+  const sut = new UserUpdateController(dbUserUpdateSpy, httpInputValidatorMock)
   return {
     sut,
-    dbUserUpdateSpy
+    dbUserUpdateSpy,
+    httpInputValidatorMock,
+    validatorMock,
   }
 }
 
@@ -46,6 +69,14 @@ describe("UserUpdateController", () => {
     jest.spyOn(dbUserUpdateSpy, 'update').mockImplementationOnce(async () => null)
     const httpResponse = await sut.handle(mockRequest())
     expect(httpResponse).toEqual(notFound())
+  })
+
+  test('Should return 400 if incorrect id param', async () => {
+    const { sut, httpInputValidatorMock } = makeSut()
+    jest.spyOn(httpInputValidatorMock, 'execute').mockImplementationOnce(() => validationErrorResult)
+    const httpResponse = await sut.handle(mockRequest())
+    expect(httpInputValidatorMock.execute).toHaveBeenCalled()
+    expect(httpResponse).toEqual(badRequest(validationErrorResult))
   })
 
   test('Should return 500 if userUpdate throws', async () => {

@@ -1,14 +1,23 @@
 import { IndexUser } from '@/domain/usecases/user'
-import { serverError, ok } from '@/presentation/helpers'
+import { serverError, ok, badRequest } from '@/presentation/helpers'
 import { Controller } from '@/presentation/protocols/controller'
 import { HttpResponse } from '@/presentation/protocols/http'
+import { HttpInputValidator } from '@/presentation/validation/http-input-validator'
 
 export class UserIndexController implements Controller {
-  constructor(private readonly userIndex: IndexUser) { }
+  constructor(
+    private readonly userIndex: IndexUser,
+    private readonly validator: HttpInputValidator
+  ) { }
   async handle(request: UserIndexController.Request): Promise<HttpResponse> {
     const { page = 1, limit = 10, email, roles, gender } = request.query
     const criteria: { [key: string]: unknown } = {}
     try {
+      const validationError = this.validator.execute(request)
+      if (validationError) {
+        return badRequest(validationError);
+      }
+
       if (email) {
         criteria.email = { $in: email }
       }

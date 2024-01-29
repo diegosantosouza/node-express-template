@@ -5,6 +5,11 @@ import { throwError } from "@/tests/domain/mocks/throw-error-helper";
 import { ok, serverError } from "@/presentation/helpers";
 import { ServerError } from "@/presentation/errors";
 import { Gender, Roles } from "@/domain/models/user";
+import { HttpInputValidator } from "@/presentation/validation/http-input-validator";
+import { ZodAdapter } from "@/infrastructure/validator/zod-adapter";
+import { indexUserRules } from "@/infrastructure/validator/schemas/index-user-validation-schema";
+
+jest.mock('@/presentation/validation/http-input-validator');
 
 const mockRequest = (): UserIndexController.Request => {
   return {
@@ -21,14 +26,20 @@ const mockRequest = (): UserIndexController.Request => {
 type SutTypes = {
   sut: UserIndexController
   dbUserIndexSpy: IndexUserRepositorySpy
+  httpInputValidatorMock: HttpInputValidator
+  validatorMock: ZodAdapter
 }
 
 const makeSut = (): SutTypes => {
+  const validatorMock = new ZodAdapter(indexUserRules)
+  const httpInputValidatorMock = new HttpInputValidator(validatorMock)
   const dbUserIndexSpy = new IndexUserRepositorySpy()
-  const sut = new UserIndexController(dbUserIndexSpy)
+  const sut = new UserIndexController(dbUserIndexSpy, httpInputValidatorMock)
   return {
     sut,
-    dbUserIndexSpy
+    dbUserIndexSpy,
+    validatorMock,
+    httpInputValidatorMock
   }
 }
 

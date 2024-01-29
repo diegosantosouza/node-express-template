@@ -4,6 +4,11 @@ import { faker } from "@faker-js/faker";
 import { throwError } from "@/tests/domain/mocks/throw-error-helper";
 import { notFound, ok, serverError } from "@/presentation/helpers";
 import { ServerError } from "@/presentation/errors";
+import { HttpInputValidator } from "@/presentation/validation/http-input-validator";
+import { ZodAdapter } from "@/infrastructure/validator/zod-adapter";
+import { validIdRule } from "@/infrastructure/validator/schemas/id-validation-schema";
+
+jest.mock('@/presentation/validation/http-input-validator');
 
 const mockRequest = (): UserShowController.Request => {
   return {
@@ -16,14 +21,20 @@ const mockRequest = (): UserShowController.Request => {
 type SutTypes = {
   sut: UserShowController
   dbUserShowSpy: ShowUserRepositorySpy
+  httpInputValidatorMock: HttpInputValidator
+  validatorMock: ZodAdapter
 }
 
 const makeSut = (): SutTypes => {
+  const validatorMock = new ZodAdapter(validIdRule)
+  const httpInputValidatorMock = new HttpInputValidator(validatorMock)
   const dbUserShowSpy = new ShowUserRepositorySpy()
-  const sut = new UserShowController(dbUserShowSpy)
+  const sut = new UserShowController(dbUserShowSpy, httpInputValidatorMock)
   return {
     sut,
-    dbUserShowSpy
+    dbUserShowSpy,
+    validatorMock,
+    httpInputValidatorMock
   }
 }
 

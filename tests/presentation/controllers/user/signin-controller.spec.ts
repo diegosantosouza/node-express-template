@@ -1,8 +1,13 @@
 import { SignInController } from '@/presentation/controllers/user/signin.controller'
-import { serverError, unauthorized, ok } from '@/presentation/helpers'
+import { serverError, unauthorized, ok, badRequest } from '@/presentation/helpers'
 import { faker } from "@faker-js/faker"
 import { throwError } from '@/tests/domain/mocks/throw-error-helper'
 import { AuthenticationSpy } from '@/tests/data/usecases/user/mocks/mock-db-authentication'
+import { HttpInputValidator } from '@/presentation/validation/http-input-validator'
+import { ZodAdapter } from '@/infrastructure/validator/zod-adapter'
+import { signInSchema } from '@/infrastructure/validator/schemas/signIn-validation-schema'
+
+jest.mock('@/presentation/validation/http-input-validator');
 
 const mockRequest = (): SignInController.Request => ({
   body: {
@@ -11,17 +16,37 @@ const mockRequest = (): SignInController.Request => ({
   }
 })
 
+const validationErrorResult =
+  [
+    {
+      code: "invalid_string",
+      expected: "",
+      received: "",
+      path: [
+        "body",
+        "email",
+      ],
+      message: "Invalid email",
+    },
+  ]
+
 type SutTypes = {
   sut: SignInController
   authenticationSpy: AuthenticationSpy
+  httpInputValidatorMock: HttpInputValidator
+  validatorMock: ZodAdapter
 }
 
 const makeSut = (): SutTypes => {
+  const validatorMock = new ZodAdapter(signInSchema)
+  const httpInputValidatorMock = new HttpInputValidator(validatorMock)
   const authenticationSpy = new AuthenticationSpy()
-  const sut = new SignInController(authenticationSpy)
+  const sut = new SignInController(authenticationSpy, httpInputValidatorMock)
   return {
     sut,
     authenticationSpy,
+    validatorMock,
+    httpInputValidatorMock
   }
 }
 
@@ -41,6 +66,13 @@ describe('SignIn Controller', () => {
     authenticationSpy.result = null
     const httpResponse = await sut.handle(mockRequest())
     expect(httpResponse).toEqual(unauthorized())
+  })
+
+  test('Should return 400 if invalid input fields', async () => {
+    const { sut, httpInputValidatorMock } = makeSut()
+    jest.spyOn(httpInputValidatorMock, 'execute').mockImplementationOnce(() => validationErrorResult)
+    const httpResponse = await sut.handle(mockRequest())
+    expect(httpResponse).toEqual(badRequest(validationErrorResult))
   })
 
   test('Should return 500 if Authentication throws', async () => {
