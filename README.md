@@ -4,9 +4,17 @@
 
 ## Run dev
 
-```
-yarn install
-docker-compose up -d
+```bash
+$ yarn install
+$ docker compose up -d
+
+## attach to container terminal
+$ docker compose exec -it app sh
+
+## initialize application
+$ yarn start:dev
+
+## attach debug vscode "Docker: Attach to Node"
 ```
 
 ## Endpoint

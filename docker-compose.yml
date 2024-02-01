@@ -14,8 +14,15 @@ services:
       NODE_ENV: development
       MONGO_URI: mongodb://mongo:27017/template
     tty: true
+    networks:
+      - node-express-template-net
 
   mongo:
     image: mongo:6.0
     ports:
       - '27017:27017'
+    networks:
+      - node-express-template-net
+
+networks:
+  node-express-template-net:
